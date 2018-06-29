@@ -9,21 +9,11 @@ class MainApp extends StatelessWidget {
     return new MaterialApp(
       title: "Flutter Learn",
       home: new Scaffold(
-        appBar: new AppBar(
-          title: new Text("Home"),
-          actions: <Widget>[
-            new IconButton(icon: new Icon( Icons.list), onPressed: _pushSaved)
-          ],
-        ),
         body: new RandomWord(),
       ),
     );
   }
 
-  //点击
-  void _pushSaved(){
-
-  }
 }
 
 
@@ -52,10 +42,48 @@ class RandomWordState extends State<RandomWord> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: new AppBar(
+        title: new Text("Home"),
+        actions: <Widget>[
+          // ignore: use_of_void_result
+          new IconButton(icon: new Icon( Icons.list), onPressed: _pushSaved)
+        ],
+      ),
       body: _buildSuggestions(),
     );
   }
-
+//点击
+  void _pushSaved(){
+    //------------------这一段还没有理解
+    Navigator.of(context).push(
+      new MaterialPageRoute(
+        builder: (context) {
+          final tiles = _save.map(
+                (pair) {
+              return new ListTile(
+                title: new Text(
+                  pair.asPascalCase,
+                  style: _bigerFont,
+                ),
+              );
+            },
+          );
+          final divided = ListTile
+              .divideTiles(
+            context: context,
+            tiles: tiles,
+          )
+              .toList();
+          return new Scaffold(
+            appBar: new AppBar(
+              title: new Text('Saved Suggestions'),
+            ),
+            body: new ListView(children: divided),
+          );
+        },
+      ),
+    );
+  }
 
   //创建
   Widget _buildSuggestions() {
@@ -107,5 +135,6 @@ class RandomWordState extends State<RandomWord> {
       },
     );
   }
+
 
 }
